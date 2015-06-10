@@ -1,7 +1,5 @@
 # Django settings for mysite project.
 
-import os
-
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
@@ -13,7 +11,7 @@ MANAGERS = ADMINS
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
+        'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
         'NAME': 'pwrcyl',                      # Or path to database file if using sqlite3.
         'USER': 'root',                      # Not used with sqlite3.
         'PASSWORD': 'paswd',                  # Not used with sqlite3.
@@ -105,7 +103,7 @@ ROOT_URLCONF = 'mysite.urls'
 WSGI_APPLICATION = 'mysite.wsgi.application'
 
 TEMPLATE_DIRS = (
-                 os.path.dirname(__file__) + '/templates',
+                 'F:\\temp\\',
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
@@ -162,4 +160,23 @@ EMAIL_HOST    = 'smtp.tp-link.net'
 Email_PORT    = 25
 EMAIL_HOST_USER = 'linchenhang'
 EMAIL_HOST_PASSWORD = 'password'
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
