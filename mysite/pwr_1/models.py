@@ -1,11 +1,11 @@
 from django.db import models
 
-from read_excel import ReadExcel
+from excel_helper import ReadExcel
 
 
 class pwr(models.Model):
-    exc = ReadExcel()
-    item_list, index_list = exc.get_test_items_list()
+
+    item_list, index_list = ReadExcel().get_test_items_list()
 
     # test info
     tester = models.CharField(max_length=10)
