@@ -1,16 +1,9 @@
-__author__ = 'Lin'
+class test:
 
-funcs = (
-    lambda _: _,
-    lambda _, __: _,
-    lambda _, __, ___: _,
-    lambda _, __, ___, ____: _,
-    lambda _, __, ___, ____, _____: _,
-    lambda _, __, ___, ____, _____, ______: _,
-    lambda _, __, ___, ____, _____, ______, _______: _,
-    lambda _, __, ___, ____, _____, ______, _______, ________: _
-)
+    @staticmethod
+    def lch():
+        return 2
+    a = lch()
 
-f = lambda _, ____: _+____
-a = f(1, 2)
-print a
+
+print test.a

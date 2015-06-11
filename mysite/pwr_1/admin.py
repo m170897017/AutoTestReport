@@ -120,9 +120,8 @@ class pwr_admin(admin.ModelAdmin):
         super(pwr_admin, self).save_model(request, obj, form, change)
 
         data = self.get_data(obj=obj)
-        per = request.user.user_permissions.select_related()
-
-#        self.email_send(message=per)
+        # per = request.user.user_permissions.select_related()
+        # self.email_send(message=per)
         write_excel.write_excel(record=obj, data=data)
 
 admin.site.register(pwr, pwr_admin)

@@ -1,19 +1,15 @@
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
 
-# Create your views here.
 from django.shortcuts import render_to_response
 from django.http import HttpResponse
-# from mysite.pwr_1 import forms
-import forms
-
-from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.views.decorators.csrf import csrf_protect
 from django.template import RequestContext
 from django.core.mail import send_mail
 from django.http import HttpResponseRedirect
 
+import forms
 
 def index(request):
     #    form = forms.test_records()
@@ -45,11 +41,8 @@ def register_page(request):
             user.groups.add(1)
             user.save()
 
-            #return HttpResponse('res: %s   \nhelp: %s' % (res,help1))
         else:
-
-            errors = str(form.errors)
-            return render_to_response('register_errors.html', {'errors': errors})
+            return render_to_response('register_errors.html', {'errors': str(form.errors)})
 
         return HttpResponseRedirect('/admin/')
     else:

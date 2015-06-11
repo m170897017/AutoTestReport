@@ -6,6 +6,7 @@ import os
 
 
 class ReadExcel(object):
+
     def __init__(self, file_path=os.getcwd() + '\\test records\\pwrcyl.xls'):
         self.ex = xlrd.open_workbook(file_path)
 
