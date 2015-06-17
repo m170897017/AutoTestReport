@@ -1,10 +1,12 @@
 #!/usr/bin/env python
-# -*- coding: UTF-8 -*
+# coding: UTF-8
+
 import re
 import os
 import time
 
 import xlrd
+
 from xlwt import *
 
 

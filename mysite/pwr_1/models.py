@@ -1,11 +1,14 @@
+# /usr/bin/env python
+# coding:utf-8
+
 from django.db import models
 
-from excel_helper import ReadExcel
+from excel_helper import ExcelHelper
 
 
 class pwr(models.Model):
 
-    item_list, index_list = ReadExcel().get_test_items_list()
+    item_list, index_list = ExcelHelper().get_test_items_list()
 
     # test info
     tester = models.CharField(max_length=10)

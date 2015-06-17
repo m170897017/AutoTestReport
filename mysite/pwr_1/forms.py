@@ -1,4 +1,6 @@
-# from django import newforms as forms
+# /usr/bin/env python
+# coding:utf-8
+
 from django import forms
 import re
 from django.contrib.auth.models import User

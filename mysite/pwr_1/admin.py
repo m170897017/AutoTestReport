@@ -1,10 +1,14 @@
-import os
+# /usr/bin/env python
+# coding:utf-8
 
 from django.contrib import admin
+
 from django.core.mail.message import EmailMessage
 
 from pwr_1.models import pwr
+
 from excel_helper import ExcelHelper
+
 
 # from django.core.mail import send_mail
 
@@ -20,7 +24,6 @@ class pwr_admin(admin.ModelAdmin):
     list_display = ('tester', 'test_date', 'test_summary')
     search_fields = ['tester']
     list_filter = ['test_date']
-
 
 
     def email_send(self, message):
@@ -85,6 +88,7 @@ class pwr_admin(admin.ModelAdmin):
         # per = request.user.user_permissions.select_related()
         # self.email_send(message=per)
         ExcelHelper.write_excel(record=obj, data=data)
+
 
 admin.site.register(pwr, pwr_admin)
 
