@@ -8,16 +8,18 @@ import time
 import xlrd
 
 from xlwt import *
+from exception_handler import logger, exception_handler
 
+DEFAULT_PATH = os.path.dirname(os.getcwd()) + '\\test records\\pwrcyl.xls'
 
 class ExcelHelper(object):
-    def __init__(self, file_path=os.getcwd() + '\\test records\\pwrcyl.xls'):
+    def __init__(self, file_path=DEFAULT_PATH):
         self.ex = xlrd.open_workbook(file_path)
         self.test_item_list = []
         self.index_list = []
         self.sh = self.ex.sheet_by_name(u'Test Items')
 
-
+    @exception_handler
     def get_test_items_list(self):
 
         row_number = self.sh.nrows
@@ -39,6 +41,7 @@ class ExcelHelper(object):
                 continue
         return [self.test_item_list, self.index_list]
 
+    @exception_handler
     def get_fieldsets_for_admin(self):
 
         item_list, index_list = self.get_test_items_list()
@@ -70,6 +73,7 @@ class ExcelHelper(object):
         return tuple(fieldsets)
 
     @classmethod
+    @exception_handler
     def write_xls_oper(cls, file_name, rec, headings, data, heading_xf, data_xfs):
 
         book = Workbook()
@@ -279,6 +283,7 @@ class ExcelHelper(object):
         book.save(file_name)
 
     @classmethod
+    @exception_handler
     def write_excel(cls, record=None, data=None):
         hdngs = ['No.', 'Test Case', 'Test Result', 'Level', 'Bug ID', 'Remark']
         kinds = 'int      text_1          text          text    text         text'.split()
@@ -310,3 +315,7 @@ class ExcelHelper(object):
         #     print item_list
         #     print index_list
         #     b = raw_input('please press enter to quit!')
+
+if __name__ == '__main__':
+    item_list, index_list = ExcelHelper().get_test_items_list()
+    print item_list, index_list

@@ -2,12 +2,11 @@
 # coding:utf-8
 
 from django.contrib import admin
-
 from django.core.mail.message import EmailMessage
 
 from pwr_1.models import pwr
-
 from excel_helper import ExcelHelper
+from exception_handler import logger, exception_handler
 
 
 # from django.core.mail import send_mail
@@ -25,7 +24,7 @@ class pwr_admin(admin.ModelAdmin):
     search_fields = ['tester']
     list_filter = ['test_date']
 
-
+    @exception_handler
     def email_send(self, message):
         """
         Send specific message to someone.
@@ -41,7 +40,7 @@ class pwr_admin(admin.ModelAdmin):
         mail.send()
         # send_mail(u'test1',u'test2','linchenhang@tp-link.net',['linchenhang@tp-link.net'],fail_silently=False)
 
-
+    @exception_handler
     def get_data(self, obj):
         """
         get data from database

@@ -50,31 +50,3 @@ def register_page(request):
         # in case of csrf error, requestcontext should be used here
         variables = RequestContext(request, {'form': form})
         return render_to_response('register.html', variables)
-    
-     
-        
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
