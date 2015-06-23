@@ -8,7 +8,8 @@ from excel_helper import ExcelHelper
 
 class pwr(models.Model):
 
-    item_list, index_list = ExcelHelper().get_test_items_list()
+    excel_helper = ExcelHelper()
+    excel_helper.get_test_items_list()
 
     # test info
     tester = models.CharField(max_length=10)
@@ -39,7 +40,7 @@ class pwr(models.Model):
     testbed_topo = models.CharField(max_length=30, blank=True, default='Topo_lan_wan', verbose_name='Topo')
     testbed_remark = models.CharField(max_length=30, blank=True, verbose_name='Remark')
 
-    for i in xrange(0, len(item_list)):
+    for i in xrange(0, len(excel_helper.test_item_list)):
         ii = str(i)
         test_result = 'test_result_' + ii
         test_com = 'test_comment_' + ii

@@ -1,16 +1,17 @@
 #!/usr/bin/env python
-# coding: UTF-8
+# -*- coding: UTF-8 -*-
 
 import re
 import os
 import time
+import copy
 
 import xlrd
 
 from xlwt import *
 from exception_handler import logger, exception_handler
 
-DEFAULT_PATH = os.path.dirname(os.getcwd()) + '\\test records\\pwrcyl.xls'
+DEFAULT_PATH = os.path.dirname(os.path.dirname(__file__)) + '\\test records\\pwrcyl.xls'
 
 class ExcelHelper(object):
     def __init__(self, file_path=DEFAULT_PATH):
@@ -18,15 +19,16 @@ class ExcelHelper(object):
         self.test_item_list = []
         self.index_list = []
         self.sh = self.ex.sheet_by_name(u'Test Items')
+        print 'enter init!!!'
 
     @exception_handler
     def get_test_items_list(self):
-
         row_number = self.sh.nrows
         patt_1 = '.\..\..*'
 
         # row_number-6 ,because it is test result comment in the last 6 rows
         for i in xrange(0, row_number - 6):
+
             try:
                 value_t = self.sh.cell(i, 0).value
                 value_1 = str(value_t)
@@ -35,11 +37,14 @@ class ExcelHelper(object):
                 if res_1:
                     self.index_list.append(res_1.group())
                     self.test_item_list.append(self.sh.cell(i, 1).value)
+
                 else:
                     continue
             except Exception, e:
                 continue
-        return [self.test_item_list, self.index_list]
+        # print 'index is', self.index_list
+        # print 'list is', self.test_item_list
+        # return copy.deepcopy([self.test_item_list, self.index_list])
 
     @exception_handler
     def get_fieldsets_for_admin(self):
@@ -317,5 +322,7 @@ class ExcelHelper(object):
         #     b = raw_input('please press enter to quit!')
 
 if __name__ == '__main__':
-    item_list, index_list = ExcelHelper().get_test_items_list()
-    print item_list, index_list
+    my_helper = ExcelHelper()
+    my_helper.get_test_items_list()
+    print my_helper.index_list
+    print my_helper.test_item_list
