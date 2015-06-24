@@ -49,7 +49,8 @@ class pwr_admin(admin.ModelAdmin):
         #            [2,'Power Button test','Pass','N/A',12345, 'None', 'None'],]
 
         data = []
-        for i in xrange(0, pwr_admin.test_record_line_num_for_test):
+        # for i in xrange(0, pwr_admin.test_record_line_num_for_test):
+        for i in xrange(0, 2):
             temp = []
             no = self.index_list[i]
             case_name = self.item_list[i]
@@ -82,7 +83,6 @@ class pwr_admin(admin.ModelAdmin):
         Given a model instance save it to the database.
         """
         super(pwr_admin, self).save_model(request, obj, form, change)
-
         data = self.get_data(obj=obj)
         # per = request.user.user_permissions.select_related()
         # self.email_send(message=per)

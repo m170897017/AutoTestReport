@@ -37,7 +37,7 @@ def register_page(request):
                                             password=form.clean_password2(),
                                             email=form.clean_email())
             user.is_staff = True
-            # user.issuperset
+            user.issuperset
             user.groups.add(1)
             user.save()
 

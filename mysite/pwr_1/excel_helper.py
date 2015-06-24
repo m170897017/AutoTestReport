@@ -49,8 +49,7 @@ class ExcelHelper(object):
     @exception_handler
     def get_fieldsets_for_admin(self):
 
-        item_list, index_list = self.get_test_items_list()
-
+        self.get_test_items_list()
         # row_number = len(item_list)
         fieldsets = [('Tester Information', {'fields': ('tester', 'test_date', 'test_summary', 'test_duration'),
                                              'classes': ('collapse', 'collapse-closed')}),
@@ -73,7 +72,7 @@ class ExcelHelper(object):
             bug_id = 'bug_id_' + number
             bug_sum = 'bug_summary_' + number
 
-            item_name = index_list[i] + ' ' + item_list[i]
+            item_name = self.index_list[i] + ' ' + self.test_item_list[i]
             fieldsets.append((item_name, {'fields': (test_result, bug_level, bug_id, bug_sum, test_com)}))
         return tuple(fieldsets)
 
