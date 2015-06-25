@@ -1,0 +1,13 @@
+{%extends 'admin/base.html'%}
+{%block title%}Sync Database{%endblock%}
+{%block head%}Sync Database{%endblock%}
+{%block content%}
+{% if result %}
+    {{ result }}
+{% endif %}
+<form method="post" action="">
+    {% csrf_token %}
+    <input type="submit" value="Syncdb Now">
+</form>
+
+{%endblock%}

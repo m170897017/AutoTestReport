@@ -13,10 +13,13 @@ from exception_handler import logger, exception_handler
 
 DEFAULT_PATH = os.path.dirname(os.path.dirname(__file__)) + '\\test records\\pwrcyl.xls'
 
+
 class ExcelHelper(object):
     def __init__(self, file_path=DEFAULT_PATH):
         self.ex = xlrd.open_workbook(file_path)
+        # test_item_list is used for test case description, like C-15551:power_cycle_func_wps_button_long_press
         self.test_item_list = []
+        # index_list is used for test case id, like 1.1.1
         self.index_list = []
         self.sh = self.ex.sheet_by_name(u'Test Items')
         print 'enter init!!!'
@@ -42,11 +45,10 @@ class ExcelHelper(object):
                     continue
             except Exception, e:
                 continue
-        # print 'index is', self.index_list
-        # print 'list is', self.test_item_list
-        # return copy.deepcopy([self.test_item_list, self.index_list])
+                # print 'index is', self.index_list
+                # print 'list is', self.test_item_list
+                # return copy.deepcopy([self.test_item_list, self.index_list])
 
-    @exception_handler
     def get_fieldsets_for_admin(self):
 
         self.get_test_items_list()
@@ -61,7 +63,9 @@ class ExcelHelper(object):
                       {'fields': ('sut_model', 'sut_driver', 'sut_os', 'sut_hw_version', 'sut_sw_version'),
                        'classes': ('collapse', 'collapse-closed')}),
                      ('Testbed Information', {'fields': ('testbed_name', 'testbed_topo', 'testbed_remark'),
-                                              'classes': ('collapse', 'collapse-closed')})]
+                                              'classes': ('collapse', 'collapse-closed')}),
+                     ('Test Case Info', {'fields': ('test_case_id',)}),
+                     ]
 
         # we have at most 29 lines now. But we use 2 to debug here
         for i in xrange(0, 2):
@@ -74,10 +78,9 @@ class ExcelHelper(object):
 
             item_name = self.index_list[i] + ' ' + self.test_item_list[i]
             fieldsets.append((item_name, {'fields': (test_result, bug_level, bug_id, bug_sum, test_com)}))
-        return tuple(fieldsets)
+        return copy.deepcopy(tuple(fieldsets))
 
     @classmethod
-    @exception_handler
     def write_xls_oper(cls, file_name, rec, headings, data, heading_xf, data_xfs):
 
         book = Workbook()
@@ -114,7 +117,7 @@ class ExcelHelper(object):
         # fnt = Font()
         # fnt.height = int(3*260)
         # style = XFStyle()
-        #    style.font = fnt
+        # style.font = fnt
         #    sheet0.row(rowx).set_style(style)
 
         rowx += 1
@@ -287,7 +290,6 @@ class ExcelHelper(object):
         book.save(file_name)
 
     @classmethod
-    @exception_handler
     def write_excel(cls, record=None, data=None):
         hdngs = ['No.', 'Test Case', 'Test Result', 'Level', 'Bug ID', 'Remark']
         kinds = 'int      text_1          text          text    text         text'.split()
@@ -315,10 +317,13 @@ class ExcelHelper(object):
         # if __name__ == '__main__':
         # path = 'C://pwrcyl.xls'
         # a = ReadExcel(file_path=path)
-        #     [item_list, index_list] = a.get_test_items_list()
+        # [item_list, index_list] = a.get_test_items_list()
         #     print item_list
         #     print index_list
         #     b = raw_input('please press enter to quit!')
+
+
+excel_helper = ExcelHelper()
 
 if __name__ == '__main__':
     my_helper = ExcelHelper()

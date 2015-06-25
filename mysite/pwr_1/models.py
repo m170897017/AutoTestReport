@@ -3,12 +3,11 @@
 
 from django.db import models
 
-from excel_helper import ExcelHelper
+from excel_helper import excel_helper
 
 
 class pwr(models.Model):
 
-    excel_helper = ExcelHelper()
     excel_helper.get_test_items_list()
 
     # test info
@@ -71,14 +70,24 @@ class pwr(models.Model):
         return self.test_summary
 
 
+class TestItemManager(models.Manager):
+
+    def create_test_item(self, test_case_id, test_case_description):
+
+        test_item = self.model(test_case_id=test_case_id, test_case_description=test_case_description)
+        test_item.save(using=self._db)
+        return test_item
+
     
-    
-    
-    
-    
-    
-    
-    
+class test_item(models.Model):
+
+    test_case_id = models.CharField(max_length=20, verbose_name='Test Case Id', blank=True)
+    test_case_description = models.CharField(max_length=40, verbose_name='Test Case Description', blank=True)
+
+    objects = TestItemManager()
+
+    def __unicode__(self):
+        return self.test_case_id
     
     
     

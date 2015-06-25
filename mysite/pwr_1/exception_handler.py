@@ -20,6 +20,7 @@ def exception_handler(func):
             logger.error('NameError: ' + e.message)
         except Exception, e:
             logger.error('Exception: ' + e.message)
+
     return you_will_never_see_my_name
 
 

@@ -4,25 +4,34 @@
 from django.contrib import admin
 from django.core.mail.message import EmailMessage
 
-from pwr_1.models import pwr
-from excel_helper import ExcelHelper
+from pwr_1.models import pwr, test_item
+from excel_helper import excel_helper
 from exception_handler import logger, exception_handler
 
 
 # from django.core.mail import send_mail
 
 
-
+@admin.register(pwr)
 class pwr_admin(admin.ModelAdmin):
     """
     This class is used for admin page of website
     """
 
-    fieldsets = ExcelHelper().get_fieldsets_for_admin()
 
-    list_display = ('tester', 'test_date', 'test_summary')
-    search_fields = ['tester']
+
+    fieldsets = excel_helper.get_fieldsets_for_admin()
+
+    list_display = ('get_tester', 'get_test_date', 'get_test_summary')
+    search_fields = ['get_tester']
     list_filter = ['test_date']
+
+    def get_tester(self):
+        return self.tester
+    def get_test_date(self):
+        return self.test_date
+    def get_test_summary(self):
+        return self.test_summary
 
     @exception_handler
     def email_send(self, message):
@@ -40,7 +49,6 @@ class pwr_admin(admin.ModelAdmin):
         mail.send()
         # send_mail(u'test1',u'test2','linchenhang@tp-link.net',['linchenhang@tp-link.net'],fail_silently=False)
 
-    @exception_handler
     def get_data(self, obj):
         """
         get data from database
@@ -52,8 +60,8 @@ class pwr_admin(admin.ModelAdmin):
         # for i in xrange(0, pwr_admin.test_record_line_num_for_test):
         for i in xrange(0, 2):
             temp = []
-            no = self.index_list[i]
-            case_name = self.item_list[i]
+            no = excel_helper.index_list[i]
+            case_name = excel_helper.test_item_list[i]
             result_name = 'test_result_' + str(i)
             exec ("result = obj." + result_name)
             comment_content = 'test_comment_' + str(i)
@@ -83,12 +91,13 @@ class pwr_admin(admin.ModelAdmin):
         Given a model instance save it to the database.
         """
         super(pwr_admin, self).save_model(request, obj, form, change)
+
+        # post-save operation, get entries from databases and write them to excel
         data = self.get_data(obj=obj)
         # per = request.user.user_permissions.select_related()
         # self.email_send(message=per)
-        ExcelHelper.write_excel(record=obj, data=data)
+        excel_helper.write_excel(record=obj, data=data)
 
 
-admin.site.register(pwr, pwr_admin)
 
 
