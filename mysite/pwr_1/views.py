@@ -10,15 +10,16 @@ from django.core.mail import send_mail
 from django.http import HttpResponseRedirect
 
 from models import test_item
+from excel_helper import excel_helper
 import forms
 
 
 def index(request):
     # form = forms.test_records()
     # if request.user.is_authenticated():
-    #        sess_info = 'is authenticated!!'
-    #    else:
-    #        sess_info = 'is not authenticated!!'
+    # sess_info = 'is authenticated!!'
+    # else:
+    # sess_info = 'is not authenticated!!'
     #    return render_to_response('index.html',{'form':form})
     #    return HttpResponse('this is my sessions: %s ...' % sess_info)
     return HttpResponseRedirect('/admin/')
@@ -33,8 +34,12 @@ def test(request):
 @csrf_exempt
 def sync_test_items(request):
     if request.method == 'POST':
-        test_item.objects.get_or_create(test_case_id='001', test_case_description='tc001')
-        test_item.objects.get_or_create(test_case_id='003', test_case_description='tc003')
+        excel_helper.get_test_items_list()
+        print 'index is', excel_helper.index_list
+        print 'item is', excel_helper.test_item_list
+        print zip(excel_helper.index_list, excel_helper.test_item_list)
+        [test_item.objects.get_or_create(test_case_id=tc_id, test_case_description=tc_des) for tc_id, tc_des in
+         zip(excel_helper.index_list, excel_helper.test_item_list)]
         print test_item.objects.all()
         return render(request, 'syncdb.html', {'result': 'Syncdb Successfully!!'})
     else:

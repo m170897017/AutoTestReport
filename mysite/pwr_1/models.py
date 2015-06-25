@@ -82,7 +82,7 @@ class TestItemManager(models.Manager):
 class test_item(models.Model):
 
     test_case_id = models.CharField(max_length=20, verbose_name='Test Case Id', blank=True)
-    test_case_description = models.CharField(max_length=40, verbose_name='Test Case Description', blank=True)
+    test_case_description = models.CharField(max_length=80, verbose_name='Test Case Description', blank=True)
 
     objects = TestItemManager()
 

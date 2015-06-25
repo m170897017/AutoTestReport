@@ -16,16 +16,19 @@ DEFAULT_PATH = os.path.dirname(os.path.dirname(__file__)) + '\\test records\\pwr
 
 class ExcelHelper(object):
     def __init__(self, file_path=DEFAULT_PATH):
+        self.test_item_list = None
+        self.index_list = None
         self.ex = xlrd.open_workbook(file_path)
-        # test_item_list is used for test case description, like C-15551:power_cycle_func_wps_button_long_press
-        self.test_item_list = []
-        # index_list is used for test case id, like 1.1.1
-        self.index_list = []
         self.sh = self.ex.sheet_by_name(u'Test Items')
         print 'enter init!!!'
 
     @exception_handler
     def get_test_items_list(self):
+
+        # test_item_list is used for test case description, like C-15551:power_cycle_func_wps_button_long_press
+        self.test_item_list = []
+        # index_list is used for test case id, like 1.1.1
+        self.index_list = []
         row_number = self.sh.nrows
         patt_1 = '.\..\..*'
 
@@ -45,9 +48,11 @@ class ExcelHelper(object):
                     continue
             except Exception, e:
                 continue
-                # print 'index is', self.index_list
-                # print 'list is', self.test_item_list
-                # return copy.deepcopy([self.test_item_list, self.index_list])
+        assert len(self.index_list) == len(self.test_item_list), 'each test case should have one test case id!!\
+            Check the test record template if you see this error message!!'
+        # print 'index is', self.index_list
+        # print 'list is', self.test_item_list
+        # return copy.deepcopy([self.test_item_list, self.index_list])
 
     def get_fieldsets_for_admin(self):
 
@@ -118,7 +123,7 @@ class ExcelHelper(object):
         # fnt.height = int(3*260)
         # style = XFStyle()
         # style.font = fnt
-        #    sheet0.row(rowx).set_style(style)
+        # sheet0.row(rowx).set_style(style)
 
         rowx += 1
         sheet0.write(rowx, 0, 'Test Duration', easyxf(content_format))
@@ -318,9 +323,9 @@ class ExcelHelper(object):
         # path = 'C://pwrcyl.xls'
         # a = ReadExcel(file_path=path)
         # [item_list, index_list] = a.get_test_items_list()
-        #     print item_list
-        #     print index_list
-        #     b = raw_input('please press enter to quit!')
+        # print item_list
+        # print index_list
+        # b = raw_input('please press enter to quit!')
 
 
 excel_helper = ExcelHelper()
@@ -330,3 +335,4 @@ if __name__ == '__main__':
     my_helper.get_test_items_list()
     print my_helper.index_list
     print my_helper.test_item_list
+    print zip(my_helper.index_list, my_helper.test_item_list)
