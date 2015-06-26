@@ -50,13 +50,13 @@ class ExcelHelper(object):
                 continue
         assert len(self.index_list) == len(self.test_item_list), 'each test case should have one test case id!!\
             Check the test record template if you see this error message!!'
-        # print 'index is', self.index_list
-        # print 'list is', self.test_item_list
-        # return copy.deepcopy([self.test_item_list, self.index_list])
 
-    def get_fieldsets_for_admin(self):
+    def get_pwr_test_items_number(self, pwr_test_item):
+        return int(pwr_test_item.objects.count())
 
-        self.get_test_items_list()
+    def get_fieldsets_for_admin(self, pwr_test_item):
+
+
         # row_number = len(item_list)
         fieldsets = [('Tester Information', {'fields': ('tester', 'test_date', 'test_summary', 'test_duration'),
                                              'classes': ('collapse', 'collapse-closed')}),
@@ -69,20 +69,24 @@ class ExcelHelper(object):
                        'classes': ('collapse', 'collapse-closed')}),
                      ('Testbed Information', {'fields': ('testbed_name', 'testbed_topo', 'testbed_remark'),
                                               'classes': ('collapse', 'collapse-closed')}),
-                     ('Test Case Info', {'fields': ('test_case_id',)}),
                      ]
 
-        # we have at most 29 lines now. But we use 2 to debug here
-        for i in xrange(0, 2):
-            number = str(i)
-            test_result = 'test_result_' + number
-            test_com = 'test_comment_' + number
-            bug_level = 'bug_level_' + number
-            bug_id = 'bug_id_' + number
-            bug_sum = 'bug_summary_' + number
+        test_items_num = pwr_test_item.objects.count()
 
-            item_name = self.index_list[i] + ' ' + self.test_item_list[i]
-            fieldsets.append((item_name, {'fields': (test_result, bug_level, bug_id, bug_sum, test_com)}))
+
+        # we have at most 30 lines now. But we use 2 to debug here
+        test_items_num = 2
+        pwr_test_item_all = pwr_test_item.objects.values()
+
+        for i in xrange(test_items_num):
+            item_name = ''.join(
+                [pwr_test_item_all[i]['test_case_id'], ' ', pwr_test_item_all[i]['test_case_description']])
+            number = str(i)
+
+            fieldsets.append((item_name, {'fields': (
+                'test_result_' + number, 'bug_level_' + number, 'bug_id_' + number, 'bug_summary_' + number,
+                'test_comment_' + number)}))
+
         return copy.deepcopy(tuple(fieldsets))
 
     @classmethod

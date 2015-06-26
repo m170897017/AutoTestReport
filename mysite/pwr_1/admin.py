@@ -4,7 +4,7 @@
 from django.contrib import admin
 from django.core.mail.message import EmailMessage
 
-from pwr_1.models import pwr, test_item
+from pwr_1.models import pwr, pwr_test_item
 from excel_helper import excel_helper
 from exception_handler import logger, exception_handler
 
@@ -20,11 +20,13 @@ class pwr_admin(admin.ModelAdmin):
 
 
 
-    fieldsets = excel_helper.get_fieldsets_for_admin()
+    fieldsets = excel_helper.get_fieldsets_for_admin(pwr_test_item)
 
     list_display = ('get_tester', 'get_test_date', 'get_test_summary')
     search_fields = ['get_tester']
     list_filter = ['test_date']
+
+    
 
     def get_tester(self):
         return self.tester

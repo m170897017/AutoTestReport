@@ -23,6 +23,6 @@ urlpatterns = patterns('',
     url(r'^$',views.register_page),
     url(r'^accounts/login/$', login),
     url(r'^accounts/logout/$',logout),
-    url(r'syncdb_test_items/$', views.sync_test_items),
+    url(r'syncdb_test_items/$', views.sync_pwr_test_items),
     
 )

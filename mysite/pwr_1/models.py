@@ -6,9 +6,28 @@ from django.db import models
 from excel_helper import excel_helper
 
 
+class TestItemManager(models.Manager):
+
+    def create_test_item(self, test_case_id, test_case_description):
+
+        test_item = self.model(test_case_id=test_case_id, test_case_description=test_case_description)
+        test_item.save(using=self._db)
+        return test_item
+
+
+class pwr_test_item(models.Model):
+
+    test_case_id = models.CharField(max_length=20, verbose_name='Test Case Id', blank=True)
+    test_case_description = models.CharField(max_length=80, verbose_name='Test Case Description', blank=True)
+
+    objects = TestItemManager()
+
+    def __unicode__(self):
+        return self.test_case_id
+
 class pwr(models.Model):
 
-    excel_helper.get_test_items_list()
+
 
     # test info
     tester = models.CharField(max_length=10)
@@ -39,8 +58,11 @@ class pwr(models.Model):
     testbed_topo = models.CharField(max_length=30, blank=True, default='Topo_lan_wan', verbose_name='Topo')
     testbed_remark = models.CharField(max_length=30, blank=True, verbose_name='Remark')
 
-    for i in xrange(0, len(excel_helper.test_item_list)):
+    for i in xrange(excel_helper.get_pwr_test_items_number(pwr_test_item)):
         ii = str(i)
+
+
+
         test_result = 'test_result_' + ii
         test_com = 'test_comment_' + ii
         bug_level = 'bug_level_' + ii
@@ -70,27 +92,17 @@ class pwr(models.Model):
         return self.test_summary
 
 
-class TestItemManager(models.Manager):
 
-    def create_test_item(self, test_case_id, test_case_description):
-
-        test_item = self.model(test_case_id=test_case_id, test_case_description=test_case_description)
-        test_item.save(using=self._db)
-        return test_item
 
     
-class test_item(models.Model):
+class table_test(models.Model):
 
     test_case_id = models.CharField(max_length=20, verbose_name='Test Case Id', blank=True)
-    test_case_description = models.CharField(max_length=80, verbose_name='Test Case Description', blank=True)
+    add_sth()
 
-    objects = TestItemManager()
+def add_sth():
+    setattr(table_test, 'test_1', models.CharField(max_length=20, verbose_name='Test 1', blank=True))
 
-    def __unicode__(self):
-        return self.test_case_id
-    
-    
-    
     
     
     

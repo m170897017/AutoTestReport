@@ -1,3 +1,8 @@
-from pwr_1.models import pwr
+class test:
 
-print pwr.objects
+    a = 1
+
+
+
+setattr(test, 'b', 2)
+print dir(test)
