@@ -9,7 +9,7 @@ from django.template import RequestContext
 from django.core.mail import send_mail
 from django.http import HttpResponseRedirect
 
-from models import test_item
+from models import pwr_test_item
 from excel_helper import excel_helper
 import forms
 
@@ -20,7 +20,7 @@ def index(request):
     # sess_info = 'is authenticated!!'
     # else:
     # sess_info = 'is not authenticated!!'
-    #    return render_to_response('index.html',{'form':form})
+    # return render_to_response('index.html',{'form':form})
     #    return HttpResponse('this is my sessions: %s ...' % sess_info)
     return HttpResponseRedirect('/admin/')
 
@@ -32,15 +32,15 @@ def test(request):
 
 
 @csrf_exempt
-def sync_test_items(request):
+def sync_pwr_test_items(request):
     if request.method == 'POST':
+
+        # When user click syncdb now, table pwr_test_item will be clear and new test items will added
         excel_helper.get_test_items_list()
-        print 'index is', excel_helper.index_list
-        print 'item is', excel_helper.test_item_list
-        print zip(excel_helper.index_list, excel_helper.test_item_list)
-        [test_item.objects.get_or_create(test_case_id=tc_id, test_case_description=tc_des) for tc_id, tc_des in
+        pwr_test_item.objects.all().delete()
+        [pwr_test_item.objects.get_or_create(test_case_id=tc_id, test_case_description=tc_des) for tc_id, tc_des in
          zip(excel_helper.index_list, excel_helper.test_item_list)]
-        print test_item.objects.all()
+
         return render(request, 'syncdb.html', {'result': 'Syncdb Successfully!!'})
     else:
         return render_to_response('syncdb.html')
