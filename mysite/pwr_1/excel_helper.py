@@ -9,10 +9,11 @@ import copy
 import xlrd
 from xlwt import *
 
-from pwr_1_decorators import mysql_con
+from pwr_1_decorators import get_logger, mysql_con, exception_handler
 
 
 DEFAULT_PATH = os.path.dirname(os.path.dirname(__file__)) + '\\test records\\pwrcyl.xls'
+logger = get_logger()
 
 
 class ExcelHelper(object):
@@ -68,6 +69,7 @@ class ExcelHelper(object):
         :param kwargs: Used for detail handling.
         :return: A tuple of sql result.
         """
+        logger.info('Now start to get test item list from database.')
         return args[0] if args else None
 
     @staticmethod
@@ -79,7 +81,7 @@ class ExcelHelper(object):
         :param kwargs: Used for detail handling.
         :return: A tuple for fieldsets in admin.
         """
-
+        logger.info('Now start to generate fieldsets for admin page.')
 
         fieldsets = [('Tester Information', {'fields': ('tester', 'test_date', 'test_summary', 'test_duration'),
                                              'classes': ('collapse', 'collapse-closed')}),
@@ -113,6 +115,7 @@ class ExcelHelper(object):
         return copy.deepcopy(tuple(fieldsets))
 
     @classmethod
+    @exception_handler
     def _write_xls_oper(cls, file_name, rec, headings, data, heading_xf, data_xfs):
         """
         Operation for writing a new excel file.
@@ -124,7 +127,7 @@ class ExcelHelper(object):
         :param data_xfs: Data format.
         :return: None.
         """
-
+        logger.info('Now start to write to excel to generate final report.')
         book = Workbook()
 
         # write test result definition
@@ -227,6 +230,7 @@ class ExcelHelper(object):
         book.save(file_name)
 
     @classmethod
+    @exception_handler
     def write_excel(cls, record=None, data=None):
         """
         Interface for writing excel.
