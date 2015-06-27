@@ -4,9 +4,8 @@
 from django.contrib import admin
 from django.core.mail.message import EmailMessage
 
-from pwr_1.models import pwr, pwr_test_item
+from pwr_1.models import pwr
 from excel_helper import excel_helper
-from exception_handler import logger, exception_handler
 
 
 # from django.core.mail import send_mail
@@ -18,15 +17,12 @@ class pwr_admin(admin.ModelAdmin):
     This class is used for admin page of website
     """
 
-
-
-    fieldsets = excel_helper.get_fieldsets_for_admin(pwr_test_item)
+    fieldsets = excel_helper.get_fieldsets_for_admin()
 
     list_display = ('get_tester', 'get_test_date', 'get_test_summary')
     search_fields = ['get_tester']
     list_filter = ['test_date']
 
-    
 
     def get_tester(self):
         return self.tester
@@ -35,7 +31,6 @@ class pwr_admin(admin.ModelAdmin):
     def get_test_summary(self):
         return self.test_summary
 
-    @exception_handler
     def email_send(self, message):
         """
         Send specific message to someone.
@@ -54,37 +49,44 @@ class pwr_admin(admin.ModelAdmin):
     def get_data(self, obj):
         """
         get data from database
+        :param obj: DB instance.
         """
         #        data = [[1,'WPS Button test.............','Pass','N/A',12345,'None','None'],
         #            [2,'Power Button test','Pass','N/A',12345, 'None', 'None'],]
 
         data = []
-        # for i in xrange(0, pwr_admin.test_record_line_num_for_test):
-        for i in xrange(0, 2):
-            temp = []
-            no = excel_helper.index_list[i]
-            case_name = excel_helper.test_item_list[i]
-            result_name = 'test_result_' + str(i)
-            exec ("result = obj." + result_name)
-            comment_content = 'test_comment_' + str(i)
-            exec ("comment = obj." + comment_content)
-            bug = 'bug_level_' + str(i)
-            exec ("bug_level = obj." + bug)
-            bug_id = 'bug_id_' + str(i)
-            exec ("bug_id = obj." + bug_id)
-            bug_sum = 'bug_summary_' + str(i)
-            exec ("bug_summary = obj." + bug_sum)
-            temp.append(no)
-            temp.append(case_name)
-            temp.append(result)
-            temp.append(bug_level)
+        result = None
+        bug_level = None
+        comment = None
+        bug_id = None
+        bug_summary = None
+        pwr_test_item_all = excel_helper.get_test_items_list_from_db()
+        # pwr_test_item_all will look like: ((1L, '1.1.1', 'C-15551:power_cycle_func_wps_button_long_press'), ...)
+
+        test_items_num = len(pwr_test_item_all)
+
+        # use 2 here for debug only
+        # for i in xrange(test_items_num):
+        for i in xrange(2):
+            no = pwr_test_item_all[i][1]
+            case_name = pwr_test_item_all[i][2]
+            i = str(i)
+            # to dynamically get test item info from database
+            commands = [
+                ''.join(['result = obj.', 'test_result_', i, ]),
+                ''.join(['comment = obj.', 'test_comment_', i, ]),
+                ''.join(['bug_level = obj.', 'bug_level_', i, ]),
+                ''.join(['bug_id = obj.', 'bug_id_', i, ]),
+                ''.join(['bug_summary = obj.', 'bug_summary_', i, ]),
+
+            ]
+            for cmd in commands:
+                exec cmd
+            # this order is strictly required
             # bug id should be bug summary position minus 2
-            temp.append(bug_id)
-            temp.append(comment)
             # bug summary should be the last one to be added because of
             # it's to be the bottom of the sheet
-            temp.append(bug_summary)
-            data.append(temp)
+            data.append([no, case_name, result, bug_level, bug_id, comment, bug_summary])
         return data
 
 
@@ -99,7 +101,3 @@ class pwr_admin(admin.ModelAdmin):
         # per = request.user.user_permissions.select_related()
         # self.email_send(message=per)
         excel_helper.write_excel(record=obj, data=data)
-
-
-
-

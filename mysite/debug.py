@@ -1,8 +1,4 @@
-class test:
+for i in range(10):
+    if i in [1,3,5]:
+        print i
 
-    a = 1
-
-
-
-setattr(test, 'b', 2)
-print dir(test)

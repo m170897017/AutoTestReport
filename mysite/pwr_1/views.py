@@ -35,7 +35,7 @@ def test(request):
 def sync_pwr_test_items(request):
     if request.method == 'POST':
 
-        # When user click syncdb now, table pwr_test_item will be clear and new test items will added
+        # When user click syncdb now, table pwr_test_item will be clear and new test items will added to database
         excel_helper.get_test_items_list()
         pwr_test_item.objects.all().delete()
         [pwr_test_item.objects.get_or_create(test_case_id=tc_id, test_case_description=tc_des) for tc_id, tc_des in

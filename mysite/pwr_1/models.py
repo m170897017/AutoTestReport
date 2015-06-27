@@ -27,7 +27,7 @@ class pwr_test_item(models.Model):
 
 class pwr(models.Model):
 
-
+    excel_helper.get_test_items_list()
 
     # test info
     tester = models.CharField(max_length=10)
@@ -58,17 +58,12 @@ class pwr(models.Model):
     testbed_topo = models.CharField(max_length=30, blank=True, default='Topo_lan_wan', verbose_name='Topo')
     testbed_remark = models.CharField(max_length=30, blank=True, verbose_name='Remark')
 
-    for i in xrange(excel_helper.get_pwr_test_items_number(pwr_test_item)):
-        ii = str(i)
+    # for i in xrange(len(excel_helper.test_item_list)):
+    for i in xrange(2):
+        i = str(i)
 
-
-
-        test_result = 'test_result_' + ii
-        test_com = 'test_comment_' + ii
-        bug_level = 'bug_level_' + ii
-        bug_id = 'bug_id_' + ii
-        bug_sum = 'bug_summary_' + ii
-        exec (test_result + "= models.CharField(max_length=20, verbose_name='Result', \
+        commands = [
+            ''.join(['test_result_', i, "= models.CharField(max_length=20, verbose_name='Result', \
         choices=(\
         ('Pass', 'P'), \
         ('Fail', 'F'), \
@@ -76,35 +71,20 @@ class pwr(models.Model):
         ('Not Avaliable', 'N/A'), \
         ('Reference', 'Ref'), \
         ('Warn', 'W')\
-        ))")
-        exec (test_com + "= models.CharField(max_length=100,  verbose_name='Comment',  blank=True)")
-        exec (bug_level + "= models.CharField(max_length=100,  verbose_name='Bug Level',  blank=True, \
+        ))"]),
+            ''.join(['test_comment_', i, "= models.CharField(max_length=100,  verbose_name='Comment',  blank=True)"]),
+            ''.join(['bug_level_', i, "= models.CharField(max_length=100,  verbose_name='Bug Level',  blank=True, \
                             choices=(('1', '1:Blocker'), \
                             ('2', '2:Critical'), \
                             ('3', '3:Major'), \
                             ('4', '4:Normal'), \
-                            ('5', '5:Enhancement')))")
-        exec (bug_id + "= models.CharField(max_length=10,  verbose_name='Bug ID',  blank=True)")
-        exec (bug_sum + "= models.CharField(max_length=100,  verbose_name='Bug Summary',  blank=True)")
+                            ('5', '5:Enhancement')))"]),
+            ''.join(['bug_id_', i, "= models.CharField(max_length=10,  verbose_name='Bug ID',  blank=True)"]),
+            ''.join(['bug_summary_', i, "= models.CharField(max_length=100,  verbose_name='Bug Summary',  blank=True)"]),
+        ]
 
+        for cmd in commands:
+            exec cmd
 
     def __unicode__(self):
         return self.test_summary
-
-
-
-
-    
-class table_test(models.Model):
-
-    test_case_id = models.CharField(max_length=20, verbose_name='Test Case Id', blank=True)
-    add_sth()
-
-def add_sth():
-    setattr(table_test, 'test_1', models.CharField(max_length=20, verbose_name='Test 1', blank=True))
-
-    
-    
-    
-    
-    
