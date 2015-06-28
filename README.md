@@ -1,11 +1,9 @@
 AutoTestReport
 ==============
 
-This is a website built by Django.
-When you log in, you can fill a form to generate a test result.
-After that, an e-mail will be sent to you with the final test result.
-
-Only pwr_1 is used as application. Other applications are only for tests.
+This is a website built by Django for test report auto generation.
+When you log in, you can create a pwr test report by filling forms in admin page.
+After saving, an e-mail will be sent to you with the final excel file.
 
 
 Here is what it looks like:
