@@ -1,6 +1,10 @@
 __author__ = 'Lin'
 
-from functools import wraps
+try:
+    from functools import wraps
+except ImportError:
+    from django.utils.functional import wraps
+    
 import logging
 import os
 
@@ -35,6 +39,7 @@ def exception_handler(func):
             logger.error('Exception: ' + e.message)
 
     return wrapper
+
 
 
 def mysql_con(sql_cmd):
